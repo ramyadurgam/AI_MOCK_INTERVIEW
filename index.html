@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InterviewAI – Smart AI Mock Interview Platform</title>
+  <meta name="description" content="AI-Powered Mock Interview Platform for Students and Fresh Graduates - Technical, Coding & HR Rounds">
+
+  <!-- Google Fonts: Plus Jakarta Sans, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Chart.js for Interactive Radar & Analytics Visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Application Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <div id="app">
+    <!-- ====================================================================
+         Sidebar Navigation (Persistent on Desktop, Collapsible on Mobile)
+         ==================================================================== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-icon">🤖</div>
+        <div class="brand-info">
+          <h2>InterviewAI</h2>
+          <span>Smart Prep Platform</span>
+        </div>
+      </div>
+
+      <!-- User Mini Profile -->
+      <div class="sidebar-user" id="sidebar-user-box">
+        <div class="user-avatar user-avatar-text">RD</div>
+        <div class="user-meta">
+          <div class="user-name user-name-display">Ramya Durgam</div>
+          <div class="user-role user-role-display">Data Scientist Candidate</div>
+        </div>
+      </div>
+
+      <!-- Live Interview Status Widget -->
+      <div class="interview-status-widget">
+        <div class="isw-header">
+          <span>Interview Pipeline</span>
+          <span style="color:var(--blue-primary); font-size:0.7rem;">Active</span>
+        </div>
+        <div class="isw-steps">
+          <div class="isw-step" id="sidebar-step-tech">
+            <span>01 Technical</span>
+            <span class="step-pill badge-emerald" id="sidebar-tech-pill">Passed</span>
+          </div>
+          <div class="isw-step" id="sidebar-step-coding">
+            <span>02 Coding</span>
+            <span class="step-pill badge-emerald" id="sidebar-coding-pill">Passed</span>
+          </div>
+          <div class="isw-step" id="sidebar-step-hr">
+            <span>03 HR Behavioral</span>
+            <span class="step-pill badge-blue" id="sidebar-hr-pill">Ready</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="sidebar-nav">
+        <div class="nav-category">Main Navigation</div>
+        <a class="nav-item active" data-screen="screen-dashboard" data-nav="screen-dashboard">
+          <span class="nav-icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a class="nav-item" data-screen="screen-env" data-nav="screen-env">
+          <span class="nav-icon">⚙️</span>
+          <span>Environment & Resume</span>
+        </a>
+        <a class="nav-item" data-screen="screen-technical" data-nav="screen-technical">
+          <span class="nav-icon">💻</span>
+          <span>Technical Round</span>
+          <span class="nav-badge">R1</span>
+        </a>
+        <a class="nav-item" data-screen="screen-coding" data-nav="screen-coding">
+          <span class="nav-icon">⚡</span>
+          <span>Coding Round</span>
+          <span class="nav-badge">R2</span>
+        </a>
+        <a class="nav-item" data-screen="screen-hr" data-nav="screen-hr">
+          <span class="nav-icon">🎙️</span>
+          <span>HR Behavioral Round</span>
+          <span class="nav-badge">R3</span>
+        </a>
+        <a class="nav-item" data-screen="screen-results" data-nav="screen-results">
+          <span class="nav-icon">📈</span>
+          <span>Results & Analytics</span>
+        </a>
+
+        <div class="nav-category" style="margin-top:10px;">Preferences</div>
+        <a class="nav-item" id="btn-open-settings">
+          <span class="nav-icon">🛠️</span>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <button class="btn-sidebar-action" id="btn-logout">
+          <span>🚪</span>
+          <span>Sign Out</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- ====================================================================
+         Main Wrapper & Top Navigation Bar
+         ==================================================================== -->
+    <div class="main-wrapper">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="menu-toggle-btn" id="btn-mobile-menu" aria-label="Toggle Navigation">☰</button>
+          <div class="breadcrumb-trail">
+            <span>InterviewAI</span>
+            <span>/</span>
+            <span class="active" id="breadcrumb-current">Dashboard</span>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="status-badge">
+            <div class="pulse-dot"></div>
+            <span>AI Model Engine v3.2 Active</span>
+          </div>
+          <button class="btn btn-secondary btn-sm" id="btn-download-resume" title="Export Resume">
+            📄 Export Resume
+          </button>
+        </div>
+      </header>
+
+      <!-- ====================================================================
+           Page Container with Views
+           ==================================================================== -->
+      <main class="page-container">
+
+        <!-- ==================================================================
+             SCREEN 1: Register / Sign In View
+             ================================================================== -->
+        <section id="screen-auth" class="screen-view">
+          <div class="auth-wrapper">
+            <div class="auth-container">
+              <div class="auth-header">
+                <div class="logo-badge">🤖</div>
+                <h1>InterviewAI</h1>
+                <p>Smart AI Mock Interview Platform for Students & Graduates</p>
+              </div>
+
+              <!-- Auth Tabs -->
+              <div class="auth-tabs">
+                <button class="auth-tab active" data-mode="signin">Sign In</button>
+                <button class="auth-tab" data-mode="register">Create Account</button>
+              </div>
+
+              <!-- 1-Click Google Signin -->
+              <button class="btn-google">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/></svg>
+                Continue with Google (Demo: Ramya Durgam)
+              </button>
+
+              <div class="auth-divider">
+                <span>Or Continue With Email</span>
+              </div>
+
+              <!-- Sign In Form -->
+              <form id="form-signin">
+                <div class="form-group">
+                  <label class="form-label" for="signin-email">Email Address</label>
+                  <input type="email" id="signin-email" class="form-control" placeholder="name@domain.com" value="ramya@interviewai.io" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="signin-password">Password</label>
+                  <input type="password" id="signin-password" class="form-control" placeholder="••••••••" value="password123" required>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; font-size:0.82rem;">
+                  <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+                    <input type="checkbox" checked> Remember me
+                  </label>
+                  <a href="#" onclick="alert('Demo password reset link has been sent to your email.'); return false;">Forgot Password?</a>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Sign In to Dashboard →</button>
+              </form>
+
+              <!-- Register Form -->
+              <form id="form-register" style="display:none;">
+                <div class="form-group">
+                  <label class="form-label" for="reg-fullname">Full Name</label>
+                  <input type="text" id="reg-fullname" class="form-control" placeholder="Ramya Durgam" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="reg-phone">Phone Number</label>
+                  <input type="tel" id="reg-phone" class="form-control" placeholder="+91 98765 43210" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="reg-email">Email Address</label>
+                  <input type="email" id="reg-email" class="form-control" placeholder="ramya@example.com" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="reg-password">Password</label>
+                  <input type="password" id="reg-password" class="form-control" placeholder="Min. 8 characters" required>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="reg-confirm">Confirm Password</label>
+                  <input type="password" id="reg-confirm" class="form-control" placeholder="Re-enter password" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Create Account & Start →</button>
+              </form>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             SCREEN 2: Dashboard View
+             ================================================================== -->
+        <section id="screen-dashboard" class="screen-view active-screen">
+          <div class="dashboard-header">
+            <div class="dashboard-title">
+              <h1>Hi, <span class="user-firstname-display">Ramya</span>! 👋</h1>
+              <p>Ready to improve your interview skills and land your dream role?</p>
+            </div>
+            <div>
+              <button class="btn btn-primary" data-nav="screen-env">
+                🚀 Launch New Mock Session
+              </button>
+            </div>
+          </div>
+
+          <!-- Interactive Interview Guidelines Hero Card -->
+          <div class="guidelines-hero-card">
+            <div class="gh-header">
+              <h2><span>💡</span> Before You Start Your Interview</h2>
+              <span>6 Essential Preparation Pillars</span>
+            </div>
+
+            <!-- 6 Interactive Guideline Cards -->
+            <div class="guidelines-grid">
+              <!-- Guideline 1 -->
+              <div class="guideline-item">
+                <div class="gi-icon">📄</div>
+                <h3>Know Your Resume</h3>
+                <p>Be prepared to explain every skill, project, internship, and achievement mentioned in your resume.</p>
+                <div class="guideline-hover-tip">💡 Tip: Revisit the specific metrics & tech stack for your lead project.</div>
+              </div>
+
+              <!-- Guideline 2 -->
+              <div class="guideline-item">
+                <div class="gi-icon">🧠</div>
+                <h3>Revise DSA</h3>
+                <p>Prepare common data structures, algorithms, complexity analysis, and problem-solving questions.</p>
+                <div class="guideline-hover-tip">💡 Tip: Focus on Two Pointers, Hash Maps, and Binary Search Trees.</div>
+              </div>
+
+              <!-- Guideline 3 -->
+              <div class="guideline-item">
+                <div class="gi-icon">💻</div>
+                <h3>Understand Your Projects</h3>
+                <p>Be ready to explain your project architecture, technologies, challenges, and your contribution.</p>
+                <div class="guideline-hover-tip">💡 Tip: Emphasize trade-offs you made when resolving bottlenecks.</div>
+              </div>
+
+              <!-- Guideline 4 -->
+              <div class="guideline-item">
+                <div class="gi-icon">🗣️</div>
+                <h3>Communicate Clearly</h3>
+                <p>Explain your thought process step by step instead of giving only the final answer.</p>
+                <div class="guideline-hover-tip">💡 Tip: Use the STAR methodology (Situation, Task, Action, Result).</div>
+              </div>
+
+              <!-- Guideline 5 -->
+              <div class="guideline-item">
+                <div class="gi-icon">⏱️</div>
+                <h3>Manage Your Time</h3>
+                <p>Think carefully but avoid spending too much time on one question.</p>
+                <div class="guideline-hover-tip">💡 Tip: Spend ~2 minutes structuring your answer before speaking.</div>
+              </div>
+
+              <!-- Guideline 6 -->
+              <div class="guideline-item">
+                <div class="gi-icon">🎤</div>
+                <h3>Stay Confident</h3>
+                <p>Speak clearly and remain calm when answering difficult questions.</p>
+                <div class="guideline-hover-tip">💡 Tip: Maintain a natural cadence and steady conversational pace.</div>
+              </div>
+            </div>
+
+            <!-- Large Primary CTA Button -->
+            <div class="cta-banner-bottom">
+              <button class="btn btn-start-interview" data-nav="screen-env">
+                LET'S START →
+              </button>
+            </div>
+          </div>
+
+          <!-- Dashboard Additional Information Row -->
+          <div class="dashboard-grid-row">
+            <!-- Interview Progress Card -->
+            <div class="card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <h3>Current Pipeline Status</h3>
+                <span class="badge badge-blue">Session #3</span>
+              </div>
+              <div class="progress-round-list">
+                <div class="progress-round-row">
+                  <div class="pr-info">
+                    <div class="pr-icon">💻</div>
+                    <div>
+                      <div class="pr-title">Technical Round</div>
+                      <div class="pr-subtitle">Resume Deep-Dive + DSA</div>
+                    </div>
+                  </div>
+                  <span class="step-pill badge-emerald" id="dash-tech-status">Passed (82%)</span>
+                </div>
+
+                <div class="progress-round-row">
+                  <div class="pr-info">
+                    <div class="pr-icon">⚡</div>
+                    <div>
+                      <div class="pr-title">Coding Round</div>
+                      <div class="pr-subtitle">Live Algorithm Editor</div>
+                    </div>
+                  </div>
+                  <span class="step-pill badge-emerald" id="dash-coding-status">Passed (86%)</span>
+                </div>
+
+                <div class="progress-round-row">
+                  <div class="pr-info">
+                    <div class="pr-icon">🎙️</div>
+                    <div>
+                      <div class="pr-title">HR Behavioral Round</div>
+                      <div class="pr-subtitle">STAR Method & Presentation</div>
+                    </div>
+                  </div>
+                  <span class="step-pill badge-blue" id="dash-hr-status">Completed (78%)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Previous Performance Card -->
+            <div class="card">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                <h3>Performance Overview</h3>
+                <span class="badge badge-purple" id="dash-total-count">3 Sessions</span>
+              </div>
+              <div class="stat-pill-group">
+                <div class="stat-pill-card">
+                  <div class="stat-val" id="dash-avg-score">82%</div>
+                  <div class="stat-label">Average Score</div>
+                </div>
+                <div class="stat-pill-card">
+                  <div class="stat-val" id="dash-best-score" style="color:var(--cyan-primary);">86%</div>
+                  <div class="stat-label">Best Score</div>
+                </div>
+              </div>
+              <div style="margin-top:14px; font-size:0.83rem; color:var(--text-secondary); display:flex; justify-content:space-between;">
+                <span>Last Mock Interview:</span>
+                <span id="dash-last-date" style="color:var(--text-primary); font-weight:600;">Sep 08, 2026</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI Recommendation Alert Banner -->
+          <div class="ai-recommendation-card">
+            <div class="air-left">
+              <div class="air-sparkle">✨</div>
+              <div class="air-text">
+                <h4>AI Diagnostic Recommendation</h4>
+                <p>Based on your previous performance, we recommend refining <strong>Data Structure complexities</strong> and <strong>Technical Communication structure</strong>.</p>
+              </div>
+            </div>
+            <button class="btn btn-purple btn-sm" data-nav="screen-results">
+              View Recommendations →
+            </button>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             SCREEN 3: Interview Environment & Resume Preparation
+             ================================================================== -->
+        <section id="screen-env" class="screen-view">
+          <div class="dashboard-header">
+            <div class="dashboard-title">
+              <h1>Let's Prepare Your Interview</h1>
+              <p>Upload or create your resume to generate tailored technical & HR interview questions.</p>
+            </div>
+          </div>
+
+          <div class="env-selection-grid">
+            <!-- Option A: Upload Resume -->
+            <div class="env-choice-card">
+              <div class="ecc-header">
+                <div class="ecc-icon">📄</div>
+                <div>
+                  <h3>Option A — Upload Resume</h3>
+                  <p>Parse PDF or DOCX file to extract verified skills</p>
+                </div>
+              </div>
+
+              <div class="dropzone-area" id="resume-dropzone">
+                <input type="file" id="resume-file-input" style="display:none;" accept=".pdf,.docx,.txt">
+                <div class="dropzone-icon">📁</div>
+                <div class="dropzone-text">Drag your resume here or browse files</div>
+                <div class="dropzone-hint">Supported formats: PDF, DOCX, TXT (Max 5MB)</div>
+              </div>
+
+              <button class="btn btn-outline" onclick="document.getElementById('resume-file-input').click();">
+                Browse & Upload Resume
+              </button>
+            </div>
+
+            <!-- Option B: Resume Builder -->
+            <div class="env-choice-card">
+              <div class="ecc-header">
+                <div class="ecc-icon">✨</div>
+                <div>
+                  <h3>Option B — Build My Resume</h3>
+                  <p>Generate a structured profile with our interactive wizard (hover over options to open)</p>
+                </div>
+              </div>
+
+              <div class="resume-builder-wizard">
+                <div class="rb-step-nav" id="rb-step-nav">
+                  <button class="rb-step-btn active" data-step="1">1. Personal</button>
+                  <button class="rb-step-btn" data-step="2">2. Education</button>
+                  <button class="rb-step-btn" data-step="3">3. Skills</button>
+                  <button class="rb-step-btn" data-step="4">4. Projects</button>
+                  <button class="rb-step-btn" data-step="5">5. Experience</button>
+                  <button class="rb-step-btn" data-step="6">6. Certs</button>
+                </div>
+                
+                <!-- Step 1: Personal Info -->
+                <div class="rb-step-content active" id="rb-step-1">
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <div class="form-group" style="margin-bottom:10px;">
+                      <label class="form-label" style="font-size:0.8rem;">Full Name</label>
+                      <input type="text" class="form-control" value="Ramya Durgam" id="rb-fullname">
+                    </div>
+                    <div class="form-group" style="margin-bottom:10px;">
+                      <label class="form-label" style="font-size:0.8rem;">Email Address</label>
+                      <input type="email" class="form-control" value="ramya@interviewai.io" id="rb-email">
+                    </div>
+                  </div>
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <div class="form-group" style="margin-bottom:10px;">
+                      <label class="form-label" style="font-size:0.8rem;">Phone Number</label>
+                      <input type="text" class="form-control" value="+91 98765 43210" id="rb-phone">
+                    </div>
+                    <div class="form-group" style="margin-bottom:10px;">
+                      <label class="form-label" style="font-size:0.8rem;">Location</label>
+                      <input type="text" class="form-control" value="Hyderabad, India" id="rb-location">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 2: Education -->
+                <div class="rb-step-content" id="rb-step-2" style="display:none;">
+                  <div style="display:grid; grid-template-columns:1.4fr 1fr; gap:10px;">
+                    <div class="form-group" style="margin-bottom:10px;">
+                      <label class="form-label" style="font-size:0.8rem;">Degree / Major</label>
+                      <input type="text" class="form-control" value="B.Tech in Computer Science & Engineering" id="rb-degree">
+                    </div>
+                    <div class="form-group" style="margin-bottom:10px;">
+                      <label class="form-label" style="font-size:0.8rem;">College / University</label>
+                      <input type="text" class="form-control" value="National Institute of Technology" id="rb-college">
+                    </div>
+                  </div>
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <div class="form-group" style="margin-bottom:10px;">
+                      <label class="form-label" style="font-size:0.8rem;">Graduation Year</label>
+                      <input type="text" class="form-control" value="2025" id="rb-gradyear">
+                    </div>
+                    <div class="form-group" style="margin-bottom:10px;">
+                      <label class="form-label" style="font-size:0.8rem;">CGPA / Percentage</label>
+                      <input type="text" class="form-control" value="8.9 / 10" id="rb-cgpa">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 3: Skills -->
+                <div class="rb-step-content" id="rb-step-3" style="display:none;">
+                  <div class="form-group" style="margin-bottom:10px;">
+                    <label class="form-label" style="font-size:0.8rem;">Programming Languages</label>
+                    <input type="text" class="form-control" value="Python, SQL, JavaScript, C++" id="rb-skills-lang">
+                  </div>
+                  <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                    <div class="form-group" style="margin-bottom:10px;">
+                      <label class="form-label" style="font-size:0.8rem;">Frameworks & Libraries</label>
+                      <input type="text" class="form-control" value="React, FastAPI, Scikit-Learn, Pandas" id="rb-skills-fw">
+                    </div>
+                    <div class="form-group" style="margin-bottom:10px;">
+                      <label class="form-label" style="font-size:0.8rem;">Databases & Tools</label>
+                      <input type="text" class="form-control" value="PostgreSQL, MongoDB, Docker, Git" id="rb-skills-tools">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Step 4: Projects -->
+                <div class="rb-step-content" id="rb-step-4" style="display:none;">
+                  <div style="display:grid; grid-template-columns:1.2fr 1fr; gap:10px;">
+                    <div class="form-group" style="margin-bottom:10px;">
+                      <label class="form-label" style="font-size:0.8rem;">Project Name</label>
+                      <input type="text" class="form-control" value="AI Smart Mock Interview Platform" id="rb-proj-name">
+                    </div>
+                    <div class="form-group" style="margin-bottom:10px;">
+                      <label class="form-label" style="font-size:0.8rem;">Technologies Used</label>
+                      <input type="text" class="form-control" value="Python, FastAPI, React, WebSockets" id="rb-proj-tech">
+                    </div>
+                  </div>
+                  <div class="form-group" style="margin-bottom:10px;">
+                    <label class="form-label" style="font-size:0.8rem;">Description & Your Contribution</label>
+                    <input type="text" class="form-control" value="Lead full-stack & ML developer. Built automated assessment scoring & role matching engine." id="rb-proj-desc">
+                  </div>
+                </div>
+
+                <!-- Step 5: Experience -->
+                <div class="rb-step-content" id="rb-step-5" style="display:none;">
+                  <div style="display:grid; grid-template-columns:1.2fr 1fr; gap:10px;">
+                    <div class="form-group" style="margin-bottom:10px;">
+                      <label class="form-label" style="font-size:0.8rem;">Company / Organization</label>
+                      <input type="text" class="form-control" value="HyperScale AI Labs" id="rb-exp-company">
+                    </div>
+                    <div class="form-group" style="margin-bottom:10px;">
+                      <label class="form-label" style="font-size:0.8rem;">Role / Title & Duration</label>
+                      <input type="text" class="form-control" value="Software Intern (6 Months)" id="rb-exp-role">
+                    </div>
+                  </div>
+                  <div class="form-group" style="margin-bottom:10px;">
+                    <label class="form-label" style="font-size:0.8rem;">Key Responsibilities & Achievements</label>
+                    <input type="text" class="form-control" value="Optimized ML query latency by 35%, deployed REST microservices on AWS, authored test suites." id="rb-exp-resp">
+                  </div>
+                </div>
+
+                <!-- Step 6: Certifications -->
+                <div class="rb-step-content" id="rb-step-6" style="display:none;">
+                  <div class="form-group" style="margin-bottom:10px;">
+                    <label class="form-label" style="font-size:0.8rem;">Certifications & Issuing Bodies</label>
+                    <input type="text" class="form-control" value="AWS Certified Cloud Practitioner (Amazon), TensorFlow Developer Certificate (Google)" id="rb-certs">
+                  </div>
+                  <p style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">
+                    These credentials will be highlighted during your Resume Knowledge evaluation in Round 1.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Action Bar -->
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:14px; flex-wrap:wrap;">
+                <div style="display:flex; gap:8px;">
+                  <button class="btn btn-secondary btn-sm" id="btn-preview-resume-builder" onclick="window.app.previewBuilderResume()">
+                    👁️ Preview
+                  </button>
+                  <button class="btn btn-outline btn-sm" onclick="window.app.downloadBuilderResume()">
+                    📄 Download
+                  </button>
+                </div>
+                <button class="btn btn-primary" onclick="window.app.submitResumeBuilder()">
+                  Analyze Profile with AI →
+                </button>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- AI Skill Extraction Animated Panel -->
+          <div class="ai-scan-panel" id="ai-scan-panel" style="display:none;">
+            <div class="ai-scan-header">
+              <div class="ai-scan-icon-animated">⚙️</div>
+              <div>
+                <h3 style="font-size:1.25rem;">AI is analyzing your profile...</h3>
+                <p style="color:var(--text-secondary); font-size:0.85rem;">Extracting competencies, project footprints, and matching optimal role benchmarks.</p>
+              </div>
+            </div>
+
+            <div class="ai-scan-checklist">
+              <div class="ai-scan-item done">
+                <span class="check-icon">✓</span>
+                <span>Reading resume & verifying academic credentials</span>
+              </div>
+              <div class="ai-scan-item done">
+                <span class="check-icon">✓</span>
+                <span>Extracting programming languages & frameworks</span>
+              </div>
+              <div class="ai-scan-item done">
+                <span class="check-icon">✓</span>
+                <span>Identifying professional experience & internships</span>
+              </div>
+              <div class="ai-scan-item done">
+                <span class="check-icon">✓</span>
+                <span>Analyzing project architecture and technical depth</span>
+              </div>
+              <div class="ai-scan-item processing">
+                <span class="check-icon">●</span>
+                <span>Matching suitable roles & computing competency weights</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI Role Recommendations Section -->
+          <div style="margin-top:36px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <h2>AI Role Recommendations</h2>
+                <p style="color:var(--text-secondary); font-size:0.9rem;">Roles ranked by skill overlap and market alignment</p>
+              </div>
+              <button class="btn btn-primary btn-lg" data-nav="screen-technical">
+                PROCEED TO TECHNICAL ROUND →
+              </button>
+            </div>
+
+            <!-- Role Cards Grid -->
+            <div class="role-cards-grid" id="recommended-roles-grid">
+              <!-- Dynamically populated by app.js -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             SCREEN 4: Round 1 - Technical Interview (15 Minutes, Max 6 Questions)
+             ================================================================== -->
+        <section id="screen-technical" class="screen-view">
+          <!-- Persistent Top Interview Round Navigation Bar -->
+          <div class="persistent-interview-nav-container"></div>
+
+          <!-- Technical Question Palette (1 ✓ | 2 ✓ | 3 ● | 4 ○ | 5 ○ | 6 ○) -->
+          <div class="question-palette-wrap" id="tech-question-palette"></div>
+
+          <!-- Technical Interview Chat & Scoring Layout -->
+          <div class="interview-chat-layout">
+            <div class="interviewer-main-card">
+              <div class="interviewer-header">
+                <div class="interviewer-avatar-badge">
+                  <div class="avatar-pulse-circle">🤖</div>
+                  <div>
+                    <h4>AI Technical Interviewer</h4>
+                    <span style="font-size:0.75rem; color:var(--emerald-primary);">● Evaluating Technical Competencies</span>
+                  </div>
+                </div>
+                <div class="badge badge-purple" id="tech-q-num">Question 1 of 6</div>
+              </div>
+
+              <!-- Question Box -->
+              <div class="question-box">
+                <div class="qb-badge" id="tech-q-cat">Resume & Core Expertise</div>
+                <div class="qb-question-text" id="tech-q-text">
+                  Loading adaptive technical question...
+                </div>
+                <div style="margin-top:8px; font-size:0.82rem; color:var(--cyan-primary);" id="tech-q-tip">
+                  💡 Focus Area: Explain memory management and optimization strategies.
+                </div>
+                <div class="qb-audio-controls">
+                  <button class="btn btn-secondary btn-sm" id="btn-tech-speak">
+                    🔊 Repeat Question
+                  </button>
+                </div>
+              </div>
+
+              <!-- AI Instant Feedback Box -->
+              <div class="ai-instant-feedback-card" id="tech-feedback-box"></div>
+
+              <!-- Answer Input Area -->
+              <div class="answer-box-wrap">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                  <label class="form-label" for="tech-answer-input" style="margin-bottom:0;">
+                    Your Technical Response <span style="color:var(--rose-primary);">* (Required)</span>
+                  </label>
+                  <span class="answer-validation-msg" id="tech-validation-msg">
+                    ⚠️ Please enter an answer before continuing.
+                  </span>
+                </div>
+                <textarea class="answer-textarea" id="tech-answer-input" placeholder="Enter your detailed technical explanation, architecture trade-offs, time/space complexity..."></textarea>
+
+                <!-- Bottom Navigation (Previous / Next / Submit) -->
+                <div class="question-nav-bottom">
+                  <button class="btn btn-secondary" id="btn-tech-prev" disabled>
+                    ← Previous Question
+                  </button>
+
+                  <span style="font-size:0.78rem; color:var(--text-muted);">
+                    Time Limit: 15 Minutes | Threshold: 70%
+                  </span>
+
+                  <button class="btn btn-primary" id="btn-submit-tech-ans" disabled>
+                    Submit & Next Question →
+                  </button>
+                </div>
+              </div>
+
+              <div id="tech-result-banner" style="display:none;"></div>
+            </div>
+
+            <!-- Right Panel: Live Technical Metrics (6 Dimensions) -->
+            <div class="technical-live-scores">
+              <div class="tls-header">
+                <span>Real-Time Evaluation</span>
+                <span class="badge badge-emerald" id="tech-live-overall">82/100</span>
+              </div>
+
+              <div class="score-metric-row">
+                <div class="smr-top">
+                  <span>Resume Knowledge</span>
+                  <span id="metric-resume-val" style="color:#60a5fa; font-weight:700;">85%</span>
+                </div>
+                <div class="metric-bar-bg">
+                  <div class="metric-bar-fill" id="metric-resume-fill" style="width:85%; background:#3b82f6;"></div>
+                </div>
+              </div>
+
+              <div class="score-metric-row">
+                <div class="smr-top">
+                  <span>Project Knowledge</span>
+                  <span id="metric-project-val" style="color:#22d3ee; font-weight:700;">84%</span>
+                </div>
+                <div class="metric-bar-bg">
+                  <div class="metric-bar-fill" id="metric-project-fill" style="width:84%; background:#06b6d4;"></div>
+                </div>
+              </div>
+
+              <div class="score-metric-row">
+                <div class="smr-top">
+                  <span>DSA & Algorithms</span>
+                  <span id="metric-dsa-val" style="color:#c084fc; font-weight:700;">78%</span>
+                </div>
+                <div class="metric-bar-bg">
+                  <div class="metric-bar-fill" id="metric-dsa-fill" style="width:78%; background:#8b5cf6;"></div>
+                </div>
+              </div>
+
+              <div class="score-metric-row">
+                <div class="smr-top">
+                  <span>Technical Concepts</span>
+                  <span id="metric-techconcepts-val" style="color:#34d399; font-weight:700;">82%</span>
+                </div>
+                <div class="metric-bar-bg">
+                  <div class="metric-bar-fill" id="metric-techconcepts-fill" style="width:82%; background:#10b981;"></div>
+                </div>
+              </div>
+
+              <div class="score-metric-row">
+                <div class="smr-top">
+                  <span>Problem Solving</span>
+                  <span id="metric-problem-val" style="color:#fbbf24; font-weight:700;">80%</span>
+                </div>
+                <div class="metric-bar-bg">
+                  <div class="metric-bar-fill" id="metric-problem-fill" style="width:80%; background:#f59e0b;"></div>
+                </div>
+              </div>
+
+              <div class="score-metric-row">
+                <div class="smr-top">
+                  <span>Answer Quality</span>
+                  <span id="metric-quality-val" style="color:#f472b6; font-weight:700;">82%</span>
+                </div>
+                <div class="metric-bar-bg">
+                  <div class="metric-bar-fill" id="metric-quality-fill" style="width:82%; background:#ec4899;"></div>
+                </div>
+              </div>
+
+              <div style="margin-top:20px; padding:12px; background:rgba(11,15,25,0.6); border-radius:8px; font-size:0.8rem; color:var(--text-secondary);">
+                <strong>Assessment Standards:</strong> Evaluated strictly on non-empty answer validation, Big-O awareness, architectural reasoning, and practical role expertise.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             SCREEN 4 (ROUND 2): Coding Round Environment
+             ================================================================== -->
+        <section id="screen-coding" class="screen-view">
+          <!-- Persistent Top Interview Round Navigation Bar -->
+          <div class="persistent-interview-nav-container"></div>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <div>
+              <h2>Round 2 — Live Algorithmic Coding Assessment</h2>
+              <p style="color:var(--text-secondary); font-size:0.85rem;">Unlocked after passing Technical Round. Solve within optimal time & space limits.</p>
+            </div>
+            <div class="badge badge-emerald">Technical Round: PASSED (✓)</div>
+          </div>
+
+          <div class="coding-environment-grid">
+            <!-- Left Side: Problem Statement -->
+            <div class="coding-problem-panel">
+              <h3 id="coding-prob-title" style="font-size:1.3rem;">Two Sum</h3>
+              <div class="problem-meta-tags">
+                <span class="badge badge-emerald" id="coding-prob-difficulty">Easy</span>
+                <span class="badge badge-blue" id="coding-prob-time">Time: O(N)</span>
+                <span class="badge badge-purple" id="coding-prob-space">Space: O(N)</span>
+              </div>
+
+              <div class="problem-desc-content" id="coding-prob-desc">
+                Loading problem statement...
+              </div>
+
+              <div id="coding-prob-examples"></div>
+
+              <div style="margin-top:16px;">
+                <strong>Constraints:</strong>
+                <ul id="coding-prob-constraints" style="margin-left:20px; margin-top:6px; font-size:0.85rem; color:var(--text-secondary);"></ul>
+              </div>
+
+              <div id="coding-result-banner" style="display:none;"></div>
+            </div>
+
+            <!-- Right Side: Interactive Code Editor -->
+            <div class="coding-editor-panel">
+              <div class="editor-toolbar">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <select class="lang-select-dropdown" id="code-lang-select">
+                    <option value="javascript">JavaScript (Node.js)</option>
+                    <option value="python">Python 3</option>
+                    <option value="java">Java 17</option>
+                    <option value="cpp">C++ 20</option>
+                  </select>
+                </div>
+                <div style="display:flex; gap:8px;">
+                  <button class="btn btn-secondary btn-sm" id="btn-reset-code">Reset</button>
+                  <button class="btn btn-outline btn-sm" id="btn-run-code">▶ Run Code</button>
+                  <button class="btn btn-primary btn-sm" id="btn-submit-code">Submit Solution →</button>
+                </div>
+              </div>
+
+              <div class="editor-textarea-container">
+                <div class="editor-line-numbers" id="editor-line-numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10</div>
+                <textarea class="code-editor-input" id="code-editor-textarea" spellcheck="false"></textarea>
+              </div>
+
+              <!-- Output Console -->
+              <div class="editor-output-console">
+                <div class="console-header">
+                  <span>Execution Console</span>
+                  <span>Test Cases</span>
+                </div>
+                <div id="console-output-body" style="color:var(--text-secondary);">
+                  Click "Run Code" to test against test cases.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             SCREEN 5: HR Round (Max 6 Questions)
+             ================================================================== -->
+        <section id="screen-hr" class="screen-view">
+          <!-- Persistent Top Interview Round Navigation Bar -->
+          <div class="persistent-interview-nav-container"></div>
+
+          <div class="dashboard-header">
+            <div class="dashboard-title">
+              <h1>Round 3 — AI HR Behavioral Interview</h1>
+              <p>Realistic conversational interview evaluating communication, structure (STAR), and presentation.</p>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span class="badge badge-emerald">🟢 Interview Active</span>
+              <span class="badge badge-purple" id="hr-timer-display">00:45</span>
+            </div>
+          </div>
+
+          <!-- HR Progress Bar (Max 6 Questions) -->
+          <div style="margin-bottom:20px;">
+            <div style="display:flex; justify-content:space-between; font-size:0.8rem; margin-bottom:6px;">
+              <span id="hr-q-counter">Question 1 of 6</span>
+              <span>Passing: Required</span>
+            </div>
+            <div class="metric-bar-bg" style="height:8px;">
+              <div class="metric-bar-fill" id="hr-progress-fill" style="width:16%; background:linear-gradient(90deg, var(--blue-primary), var(--purple-primary));"></div>
+            </div>
+          </div>
+
+          <div class="hr-interview-grid">
+            <!-- AI HR Interviewer Avatar Box -->
+            <div class="hr-avatar-box">
+              <div class="hr-avatar-pulse-art" id="hr-avatar-art">👩‍💼</div>
+              <h3 style="font-size:1.15rem; margin-bottom:2px;">AI HR Interviewer</h3>
+              <span style="font-size:0.75rem; color:var(--text-secondary);">Natural Conversational Voice Engine</span>
+
+              <div class="hr-audio-wave-visualizer">
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+                <div class="wave-bar"></div>
+              </div>
+
+              <div style="margin-top:20px; text-align:center; padding:0 20px;">
+                <h4 id="hr-q-text" style="font-size:1.05rem; font-weight:600; line-height:1.4;">
+                  Tell me about yourself, your educational milestones, and what drove your passion for a career in technology.
+                </h4>
+                <div id="hr-q-criteria" style="font-size:0.78rem; color:var(--cyan-primary); margin-top:8px;">
+                  Focus: Clear professional narrative, enthusiasm, concise summary of key milestones.
+                </div>
+              </div>
+            </div>
+
+            <!-- Candidate Camera & Microphone Viewfinder -->
+            <div class="candidate-cam-box">
+              <video id="webcam-video" class="webcam-feed-video" autoplay playsinline muted></video>
+
+              <!-- Placeholder overlay when camera is off -->
+              <div class="cam-placeholder-overlay" id="cam-placeholder">
+                <div style="font-size:2.5rem; margin-bottom:8px;">🎥</div>
+                <h4>Camera is Off</h4>
+                <p style="font-size:0.8rem; color:var(--text-secondary); max-width:320px; margin-top:4px;">
+                  Camera access is completely optional and used only to assess presentation indicators (speaking pace, response timing, pauses).
+                </p>
+                <button class="btn btn-outline btn-sm" style="margin-top:12px;" onclick="window.app.toggleWebcam()">
+                  Enable Webcam Feed
+                </button>
+              </div>
+
+              <!-- HUD overlay -->
+              <div class="cam-hud-overlay">
+                <div class="cam-indicators-pill">
+                  <span>Candidate:</span>
+                  <strong class="user-firstname-display">Ramya</strong>
+                </div>
+                <div class="cam-indicators-pill">
+                  <span style="color:var(--emerald-primary);">● Audio Active</span>
+                </div>
+              </div>
+
+              <!-- Controls Toolbar -->
+              <div class="cam-controls-bar">
+                <button class="btn btn-secondary btn-sm" id="btn-toggle-camera">🎥 Camera: OFF</button>
+                <button class="btn btn-primary btn-sm" id="btn-hr-record">🎤 Record Answer</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Answer & Submit Section -->
+          <div class="card" style="margin-top:16px;">
+            <label class="form-label" for="hr-ans-input">Your Answer Transcription / Notes</label>
+            <textarea id="hr-ans-input" class="answer-textarea" style="min-height:90px;" placeholder="Click 'Record Answer' to speak or type your answer here..."></textarea>
+            
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px;">
+              <p class="presentation-disclaimer-note">
+                Presentation indicators assess speaking pace and structured delivery only.
+              </p>
+              <div style="display:flex; gap:10px;">
+                <button class="btn btn-primary" id="btn-submit-hr-ans">
+                  Submit & Next Question →
+                </button>
+                <button class="btn btn-success" onclick="window.app.finishHRRound()">
+                  SUBMIT & VIEW RESULT →
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================================
+             SCREEN 6: Results & Personalized Performance Analysis
+             ================================================================== -->
+        <section id="screen-results" class="screen-view">
+          <!-- Persistent Top Interview Round Navigation Bar -->
+          <div class="persistent-interview-nav-container"></div>
+
+          <div class="dashboard-header">
+            <div class="dashboard-title">
+              <h1>Your Interview Results</h1>
+              <p>Comprehensive multi-dimensional performance evaluation & personalized improvement roadmap.</p>
+            </div>
+            <div>
+              <button class="btn btn-secondary" onclick="window.print()">
+                📥 Export PDF Report
+              </button>
+            </div>
+          </div>
+
+          <!-- Hero Scores Row -->
+          <div class="results-hero-grid">
+            <!-- Overall Circular Score Card -->
+            <div class="overall-score-circular-card">
+              <div class="score-circle-svg-wrap">
+                <svg width="170" height="170" viewBox="0 0 170 170">
+                  <defs>
+                    <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#3b82f6" />
+                      <stop offset="100%" stop-color="#10b981" />
+                    </linearGradient>
+                  </defs>
+                  <circle class="score-circle-bg" cx="85" cy="85" r="70"></circle>
+                  <circle class="score-circle-val" id="score-circle-fill" cx="85" cy="85" r="70"></circle>
+                </svg>
+                <div class="score-center-text">
+                  <div class="score-number" id="overall-score-number">82</div>
+                  <div class="score-pct">%</div>
+                </div>
+              </div>
+              <h3 style="font-size:1.1rem;">Overall Interview Performance</h3>
+              <span class="badge badge-emerald" style="margin-top:6px;">Status: Highly Recommended</span>
+            </div>
+
+            <!-- 3 Round Score Cards -->
+            <div class="round-score-cards-grid">
+              <div class="round-score-card">
+                <div class="rsc-top">
+                  <span style="font-size:0.85rem; color:var(--text-secondary);">Technical Round</span>
+                  <span>💻</span>
+                </div>
+                <div class="rsc-score" id="result-tech-score" style="color:#60a5fa;">82%</div>
+                <span class="badge badge-emerald">PASSED (Threshold: 70%)</span>
+              </div>
+
+              <div class="round-score-card">
+                <div class="rsc-top">
+                  <span style="font-size:0.85rem; color:var(--text-secondary);">Coding Round</span>
+                  <span>⚡</span>
+                </div>
+                <div class="rsc-score" id="result-coding-score" style="color:#c084fc;">86%</div>
+                <span class="badge badge-emerald">PASSED (Threshold: 70%)</span>
+              </div>
+
+              <div class="round-score-card">
+                <div class="rsc-top">
+                  <span style="font-size:0.85rem; color:var(--text-secondary);">HR Behavioral</span>
+                  <span>🎙️</span>
+                </div>
+                <div class="rsc-score" id="result-hr-score" style="color:#34d399;">78%</div>
+                <span class="badge badge-emerald">COMPLETED</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Analytics Graphs -->
+          <div class="results-charts-grid">
+            <div class="chart-container-card">
+              <h3 style="margin-bottom:12px; font-size:1rem;">HR & Communication Competency Radar</h3>
+              <div class="chart-wrapper">
+                <canvas id="hr-radar-chart"></canvas>
+              </div>
+            </div>
+
+            <div class="chart-container-card">
+              <h3 style="margin-bottom:12px; font-size:1rem;">Round Benchmark Breakdown</h3>
+              <div class="chart-wrapper">
+                <canvas id="metrics-bar-chart"></canvas>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI Comprehensive Review Section -->
+          <div class="card" style="margin-bottom:28px;">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px;">
+              <div class="air-sparkle">🤖</div>
+              <h3>AI Performance Review</h3>
+            </div>
+            <p id="ai-review-narrative" style="color:#cbd5e1; font-size:0.95rem; line-height:1.6;">
+              Your technical knowledge and project understanding are strong. Your coding performance was above average. In the HR round, your answers were relevant, but some responses could be more structured and concise.
+            </p>
+          </div>
+
+          <!-- Strong Areas vs Needs Improvement Grid -->
+          <div class="strengths-weaknesses-grid">
+            <div class="sw-box strong-box">
+              <h4 style="color:var(--emerald-primary);">✓ Strong Areas</h4>
+              <div class="sw-tags-wrap" id="strong-areas-wrap">
+                <span class="badge badge-emerald">✓ Python Fundamentals</span>
+                <span class="badge badge-emerald">✓ Machine Learning</span>
+                <span class="badge badge-emerald">✓ Project Explanation</span>
+                <span class="badge badge-emerald">✓ Problem Solving Logic</span>
+              </div>
+            </div>
+
+            <div class="sw-box weak-box">
+              <h4 style="color:var(--amber-primary);">⚠ Needs Improvement</h4>
+              <div class="sw-tags-wrap" id="weak-areas-wrap">
+                <span class="badge badge-amber">⚠ Data Structures & Trees</span>
+                <span class="badge badge-amber">⚠ Time Complexity Analysis</span>
+                <span class="badge badge-amber">⚠ Technical Communication</span>
+                <span class="badge badge-amber">⚠ STAR Answer Structure</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Personalized Learning Plan -->
+          <div class="card" style="margin-bottom:32px;">
+            <h3>Personalized Learning & Practice Plan</h3>
+            <p style="color:var(--text-secondary); font-size:0.85rem;">Tailored practice drills generated based on your diagnosed weaknesses</p>
+            <div class="learning-plan-grid" id="personalized-plan-grid">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+          <!-- Performance History Table & Improvement Highlight -->
+          <div class="card">
+            <h3>Interview Performance History</h3>
+            <div class="history-table-container">
+              <table class="history-table">
+                <thead>
+                  <tr>
+                    <th>Interview</th>
+                    <th>Role</th>
+                    <th>Technical</th>
+                    <th>Coding</th>
+                    <th>HR</th>
+                    <th>Overall</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody id="history-table-body">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="improvement-highlight-banner">
+              <span>📈</span>
+              <span>You improved by <strong>11%</strong> across your last 3 mock interviews. Keep going!</span>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       Modal: Locked Round Notice
+       ==================================================================== -->
+  <div class="modal-backdrop" id="modal-locked-round">
+    <div class="modal-dialog" style="max-width: 480px; text-align: center;">
+      <div style="font-size: 3rem; margin-bottom: 12px;">🔒</div>
+      <h3 id="locked-modal-title" style="margin-bottom: 8px;">Round Locked</h3>
+      <p id="locked-modal-desc" style="color: var(--text-secondary); font-size: 0.92rem; line-height: 1.5; margin-bottom: 24px;">
+        Complete and pass the previous interview round to unlock this stage.
+      </p>
+      <div style="display: flex; justify-content: center; gap: 12px;">
+        <button class="btn btn-primary btn-close-modal">Got it, Understood</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       Modal: Application Settings
+       ==================================================================== -->
+  <div class="modal-backdrop" id="modal-settings">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>InterviewAI Settings</h3>
+        <button class="btn-close-modal">✕</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">AI Engine Mode</label>
+        <select class="form-control" id="settings-ai-mode">
+          <option value="mock_intelligent">Built-in Intelligent Engine (Fastest)</option>
+          <option value="openai">OpenAI (GPT-4o)</option>
+          <option value="gemini">Google Gemini 1.5 Pro</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Custom API Key (Optional)</label>
+        <input type="password" class="form-control" id="settings-api-key" placeholder="sk-...">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Passing Score Threshold (%)</label>
+        <input type="number" class="form-control" value="70" min="50" max="90" id="settings-pass-threshold">
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+        <button class="btn btn-secondary btn-close-modal">Cancel</button>
+        <button class="btn btn-primary" onclick="window.app.showToast('Settings saved successfully.', 'success'); document.getElementById('modal-settings').classList.remove('active');">
+          Save Settings
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Layer -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Core Application Scripts -->
+  <script src="js/db.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/speechEngine.js"></script>
+  <script src="js/resumeParser.js"></script>
+  <script src="js/codeRunner.js"></script>
+  <script src="js/aiService.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
+
